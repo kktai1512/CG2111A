@@ -16,7 +16,7 @@ void setup() {
 }
 void loop() {
  ledToggle();
- //Serial.println(adcvalue);
+ 
  _delay_loop_2(adcvalue);
  
 }
