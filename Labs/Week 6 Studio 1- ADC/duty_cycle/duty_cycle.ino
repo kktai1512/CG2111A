@@ -1,6 +1,7 @@
 #include "Arduino.h"
 #include <avr/interrupt.h>
-unsigned int adcvalue;
+unsigned int adcvalue, loval, hival;
+
 unsigned int remapped_adc;
 void InitPWM()
 {
@@ -15,22 +16,36 @@ void startPWM()
 }
 ISR(TIMER0_COMPA_vect)
 {
-// Provide your code for the ISR
+  OCR0A = remapped_adc;
+  ledToggle();
 }
 ISR(ADC_vect)
 {
-// Provide your code for the ISR
+ loval = ADCL;
+ hival = ADCH;
+ adcvalue = (hival << 8) | loval;
+ remapped_adc = ((adcvalue-568)*255)/337;
+ ADCSRA |= (1 << ADSC);
+ 
 }
+
+void ledToggle()
+{
+ PORTB ^= (1 << PORTB5);
+}
+
 void setup() {
  // put your setup code here, to run once:
  PRR &= 0b11111110;
  ADCSRA = 0b10001111;
  ADMUX = 0b01000000;
- DDRB |= 0b00100000;
+  // Set PortB Pin 5 as output
+ DDRB |= (1 << DDB5);
  
  InitPWM();
  startPWM();
  sei();
  ADCSRA |= 0b01000000;
+ Serial.begin(9600);
 }
 void loop() {}

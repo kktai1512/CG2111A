@@ -16,7 +16,9 @@ void setup() {
 }
 void loop() {
  ledToggle();
+ //Serial.println(adcvalue);
  _delay_loop_2(adcvalue);
+ 
 }
 void ledToggle()
 {
@@ -24,5 +26,10 @@ void ledToggle()
 }
 ISR(ADC_vect)
 {
- // Provide your code for the ISR
+
+ loval = ADCL;
+ hival = ADCH;
+ adcvalue = (hival << 8) | loval;
+ ADCSRA |= (1 << ADSC);
+ 
 }
