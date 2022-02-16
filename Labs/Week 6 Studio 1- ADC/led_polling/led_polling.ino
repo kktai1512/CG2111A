@@ -7,8 +7,7 @@ void setup() {
  ADCSRA |= ((1 << ADEN) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0));
  //REFS[1:0] = 01 (AVcc as reference), MUX[2:0] = 000 (Channel 0)
  ADMUX |= ((1 << REFS0));
- // Set PortB Pin 5 as output
- DDRB |= (1 << DDB5);
+
 }
 void loop() {
  // ADSC = 1 (Start Conversion)
